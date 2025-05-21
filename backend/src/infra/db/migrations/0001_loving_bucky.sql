@@ -1,0 +1,1 @@
+ALTER TABLE "urls" RENAME TO "links";
