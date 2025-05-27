@@ -2,6 +2,7 @@ import { fakerPT_BR as faker } from '@faker-js/faker'
 import type { InferInsertModel } from 'drizzle-orm'
 import { db } from '../../src/infra/db'
 import { schema } from '../../src/infra/db/schemas'
+import { env } from '@/env'
 
 export async function makeLink(
   overrides?: Partial<InferInsertModel<typeof schema.links>>
@@ -11,7 +12,7 @@ export async function makeLink(
 
   const [link] = await db
     .insert(schema.links)
-    .values({ originalUrl, shortenedUrl, ...overrides })
+    .values({ originalUrl, shortenedUrl: `${env.FRONTEND_URL}/${shortenedUrl}`, ...overrides })
     .returning()
 
   return link

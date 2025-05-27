@@ -25,7 +25,9 @@ export async function getOriginalUrlRoute(app: FastifyInstance) {
 
     if (isRight(result)) {
       const { originalUrl } = unwrapEither(result)
-      return reply.redirect(originalUrl)
+      return reply.status(200).send({
+        originalUrl,
+      })
     }
   })
 }

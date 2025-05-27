@@ -9,8 +9,10 @@ interface CreateLinkInput {
   shortenedUrl: string
 }
 
+type Link = typeof schema.links.$inferSelect
+
 interface CreateLinkOutput {
-  id: string
+  link: Link
 }
 
 export async function createLink({
@@ -31,5 +33,5 @@ export async function createLink({
     .values({ originalUrl, shortenedUrl })
     .returning()
 
-  return makeRight({ id: createdLink.id })
+  return makeRight({ link: createdLink })
 }

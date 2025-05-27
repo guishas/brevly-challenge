@@ -1,3 +1,4 @@
+import { fakerPT_BR as faker } from '@faker-js/faker'
 import { db } from '@/infra/db'
 import { schema } from '@/infra/db/schemas'
 import { isLeft, isRight } from '@/shared/either'
@@ -6,12 +7,17 @@ import { makeLink } from 'test/factories/make-link'
 import { describe, expect, it } from 'vitest'
 import { LinkNotFoundError } from './errors/link-not-found-error'
 import { getOriginalUrl } from './get-original-url'
+import { env } from '@/env'
 
 describe('get original url', () => {
   it('should be able to get original url from shortened url', async () => {
-    const link = await makeLink()
+    const shortenedUrl = faker.string.alphanumeric(10)
 
-    const sut = await getOriginalUrl({ shortenedUrl: link.shortenedUrl })
+    const link = await makeLink({
+      shortenedUrl: `${env.FRONTEND_URL}/${shortenedUrl}`
+    })
+
+    const sut = await getOriginalUrl({ shortenedUrl })
 
     expect(isRight(sut)).toBe(true)
     expect(sut.right).toEqual({ originalUrl: link.originalUrl })
@@ -25,11 +31,15 @@ describe('get original url', () => {
   })
 
   it('should be able to increment visits when getting original url', async () => {
-    const link = await makeLink()
+    const shortenedUrl = faker.string.alphanumeric(10)  
+    
+    const link = await makeLink({
+      shortenedUrl: `${env.FRONTEND_URL}/${shortenedUrl}`
+    })
 
-    await getOriginalUrl({ shortenedUrl: link.shortenedUrl })
+    await getOriginalUrl({ shortenedUrl })
 
-    const sut = await getOriginalUrl({ shortenedUrl: link.shortenedUrl })
+    const sut = await getOriginalUrl({ shortenedUrl })
 
     expect(isRight(sut)).toBe(true)
 

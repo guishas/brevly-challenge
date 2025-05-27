@@ -11,6 +11,8 @@ const app = fastify()
 
 app.register(fastifyCors, {
   origin: '*',
+  methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 })
 
 app.register(createLinkRoute)

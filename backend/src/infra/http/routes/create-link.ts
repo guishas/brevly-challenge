@@ -31,8 +31,8 @@ export async function createLinkRoute(app: FastifyInstance) {
     }
 
     if (isRight(result)) {
-      const { id } = unwrapEither(result)
-      return reply.status(201).send({ id })
+      const { link } = unwrapEither(result)
+      return reply.status(201).send({ link })
     }
   })
 }
